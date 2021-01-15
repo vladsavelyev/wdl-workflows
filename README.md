@@ -30,3 +30,19 @@ cromwell -Dconfig.file=cromwell.conf run workflow.wdl --inputs inputs.json --opt
 ```
 
 Make sure to keep `&` in the end to run the process in the background, otherwise you might accidentally interrupt the execution. To bring the process to the foreground, so you could interrupt it, run `fg`.
+
+## Examples
+
+To run a [WES germline variant calling WDL workflow](https://github.com/populationgenomics/warp/blob/start_from_mapped_bam/pipelines/broad/dna_seq/germline/single_sample/) (which is based on [Broad WARP](https://github.com/broadinstitute/warp/)) on a sample NA12878 using the data from `gs://genomics-public-data`, run the following commands:
+
+```
+git clone https://github.com/populationgenomics/cpg-fewgenomes
+git clone https://github.com/populationgenomics/warp
+SAMPLE=NA12878
+cromwell -Dconfig.file=cromwell.conf run \
+    warp/pipelines/broad/dna_seq/germline/single_sample/exome/ExomeFromBam.wdl \ 
+    --inputs cpg-fewgenomes/datasets/toy/exome_bam/$SAMPLE.json \
+    --options options.json
+```
+
+Also see [populationgenomics/cpg-fewgenomes](https://github.com/populationgenomics/cpg-fewgenomes) for more details on how the input JSON was generated.
