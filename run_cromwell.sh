@@ -1,0 +1,4 @@
+
+REGION=$1
+PROJECT=$2
+
