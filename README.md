@@ -33,7 +33,7 @@ Make sure to keep `&` in the end to run the process in the background, otherwise
 
 ## WARP inputs
 
-The `warp-inputs/` folder contains templates that can be modified to use with WARP workflows, such as [WGS or WES germline variant calling](https://github.com/populationgenomics/warp/blob/master/pipelines/broad/dna_seq/germline/single_sample/). You'll have to replace the input parameters on top (`<sample-name>` and `<bam-location>` for the workflows that start from BAM, or the parametrs in the `sample_and_fastqs` section from the workflows that start from Fastq); all the reference-data inputs are pre-filled to point to the Broad public genomcis buckets.
+The `warp-inputs/` folder contains templates that can be modified to use with [WGS or WES germline variant calling WARP workflows](https://github.com/populationgenomics/warp/blob/master/pipelines/broad/dna_seq/germline/single_sample/). You'll have to replace the input parameters on top (`<sample-name>` and `<bam-location>` for the workflows that start from BAM, or the parametrs in the `sample_and_fastqs` section for the workflows that start from Fastqs); all the reference-data inputs are pre-filled to point to the Broad public genomcis buckets.
 
 ## Examples
 
