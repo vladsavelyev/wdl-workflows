@@ -11,13 +11,17 @@ conda activate cromwell
 
 Cromwell takes 2 configuration files on input: `cromwell.conf` and `options.json`. We provide templates for both files, which are suitable for running workflows using [Google Cloud Life Sciences](https://cromwell.readthedocs.io/en/stable/tutorials/PipelinesApi101/) (previously known as PAPI - Pipelines API).
 
-*Important*: Google Cloud Life Sciences doesn't yet work in the Australian cloud region, so you will have to stick to US regions like `us-central1`. Thus, use buckets also created in the same US region. Don't move large files like BAM files between the continents: copying 100G will cost $15.
-
 To run Cromwell, first edit `cromwell.template.conf` to replace the following values in angle brackets:
 
 * `<project>`: the Google Cloud project name
 * `<bucket>`: a Google Cloud Storage bucket name to store executions
 * (optional) `<mysql-password>`: MySQL password for a locally running MySQL server that will be used to track Cromwell executions in order to allow restarts of incomplete runs. You can comment out the entire `database` section if you don't need that functionality.
+
+**Important**: Make sure to schedule your VM workers in a region that's
+colocated with your data buckets, to avoid incurring high network egress
+costs. Don't move large files like BAMs between continents: copying 1 TB of
+data from the US to Australia costs 190 USD. Adjust the `default-zones`
+attribute in the template if necessary.
 
 Also edit `options.template.json`:
 
