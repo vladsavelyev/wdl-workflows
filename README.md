@@ -54,8 +54,8 @@ foreground.
 ## WARP inputs
 
 The `warp-input-templates/` folder contains templates that can be modified to use with
-the [germline variant calling WARP workflows](https://github.com/populationgenomics/warp/blob/master/pipelines/broad/dna_seq/germline/)
-. You'll have to replace the input parameters at the top. Specifically:
+the [germline variant calling WARP workflows](https://github.com/populationgenomics/warp/blob/master/pipelines/broad/dna_seq/germline/).
+You'll have to replace the input parameters at the top. Specifically:
 
 * `<sample-name>` and `<bam-location>` for the single-sample workflows `WGSFromBam`
   and `ExomeFromBam`,
