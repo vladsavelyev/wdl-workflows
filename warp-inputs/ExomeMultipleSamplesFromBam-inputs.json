@@ -1,10 +1,7 @@
 {
-  "ExomeFromBam.sample_name": "<sample-name>",
-  "ExomeFromBam.base_file_name": "<sample-name>",
-  "ExomeFromBam.final_gvcf_base_name": "<sample-name>",
-  "ExomeFromBam.input_bam": "<bam-location>",
+  "ExomeMultipleSamplesFromBam.sample_map": "ExomeMultipleSamplesFromBam-samplemap.tsv",
 
-  "ExomeFromBam.references": {
+  "ExomeMultipleSamplesFromBam.references": {
     "contamination_sites_ud": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.UD",
     "contamination_sites_bed": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.bed",
     "contamination_sites_mu": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.mu",
@@ -33,21 +30,21 @@
     "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_evaluation_regions.v1.interval_list",
     "haplotype_database_file":  "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
   },
-  "ExomeFromBam.scatter_settings": {
+  "ExomeMultipleSamplesFromBam.scatter_settings": {
     "haplotype_scatter_count": 10,
     "break_bands_at_multiples_of": 0
   },
-  "ExomeFromBam.target_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
-  "ExomeFromBam.papi_settings": {
+  "ExomeMultipleSamplesFromBam.target_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
+  "ExomeMultipleSamplesFromBam.papi_settings": {
     "preemptible_tries": 3,
     "agg_preemptible_tries": 3
   },
-  "ExomeFromBam.ExomeFromFastq.AggregatedBamQC.CollectReadgroupBamQualityMetrics.collect_gc_bias_metrics": false,
-  "ExomeFromBam.ExomeFromFastq.AggregatedBamQC.CollectAggregationMetrics.collect_gc_bias_metrics": false,
-  "ExomeFromBam.ExomeFromFastq.FastqsToAlignedBam.CheckContamination.disable_sanity_check": true,
+  "ExomeMultipleSamplesFromBam.ExomeFromBam.ExomeFromFastq.AggregatedBamQC.CollectReadgroupBamQualityMetrics.collect_gc_bias_metrics": false,
+  "ExomeMultipleSamplesFromBam.ExomeFromBam.ExomeFromFastq.AggregatedBamQC.CollectAggregationMetrics.collect_gc_bias_metrics": false,
+  "ExomeMultipleSamplesFromBam.ExomeFromBam.ExomeFromFastq.FastqsToAlignedBam.CheckContamination.disable_sanity_check": true,
 
-  "ExomeFromBam.to_cram": false,
-  "ExomeFromBam.check_contamination": true,
-  "ExomeFromBam.check_fingerprints": true,
-  "ExomeFromBam.validate_gvcf": false
+  "ExomeMultipleSamplesFromBam.to_cram": false,
+  "ExomeMultipleSamplesFromBam.check_contamination": true,
+  "ExomeMultipleSamplesFromBam.check_fingerprints": true,
+  "ExomeMultipleSamplesFromBam.validate_gvcf": false
 }
