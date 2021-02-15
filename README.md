@@ -103,5 +103,5 @@ cromwell -Dconfig.file=cromwell.conf run \
 ```
 
 Also
-see [populationgenomics/cpg-fewgenomes](https://github.com/populationgenomics/fewgenomes)
+see [populationgenomics/fewgenomes](https://github.com/populationgenomics/fewgenomes)
 for more details on how the input JSON was generated.
