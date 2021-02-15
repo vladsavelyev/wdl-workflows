@@ -86,19 +86,19 @@ git clone https://github.com/populationgenomics/warp
 SAMPLE=NA19238
 cromwell -Dconfig.file=cromwell.conf run \
     warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSFromBam.wdl \ 
-    --inputs fewgenomes/datasets/5genomes/wgs_bam/$SAMPLE.json \
+    --inputs fewgenomes/datasets/6genomes/wgs_bam/$SAMPLE.json \
     --options options.json
 ```
 
 To run the WGS workflow on multiple samples in parallel for the entire dataset 
-`5genomes`, use:
+`6genomes`, use:
 
 ```
 git clone https://github.com/populationgenomics/fewgenomes
 git clone https://github.com/populationgenomics/warp
 cromwell -Dconfig.file=cromwell.conf run \
     warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSMultipleSamplesFromBam.wdl \ 
-    --inputs fewgenomes/datasets/5genomes/5genomes-wgs_bam.json \
+    --inputs fewgenomes/datasets/6genomes/6genomes-wgs_bam.json \
     --options options.json
 ```
 
