@@ -83,10 +83,10 @@ using the data from `gs://genomics-public-data`, run the following commands:
 ```
 git clone https://github.com/populationgenomics/fewgenomes
 git clone https://github.com/populationgenomics/warp
-SAMPLE=NA19238
+SAMPLE=HG00272
 cromwell -Dconfig.file=cromwell.conf run \
     warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSFromBam.wdl \ 
-    --inputs fewgenomes/datasets/6genomes/wgs_bam/$SAMPLE.json \
+    --inputs fewgenomes/datasets/2genomes/wgs_bam/$SAMPLE.json \
     --options options.json
 ```
 
