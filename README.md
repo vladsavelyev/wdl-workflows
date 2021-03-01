@@ -47,7 +47,7 @@ Also edit `options.template.json`:
   
 #### Authentication
 
-By default, Cromwell will use the account that's currently authenticated with `gsutil` on the current computer. It's possible to configure Cromwell to use a service account, see the [Cromwell: Google Backend](https://cromwell.readthedocs.io/en/stable/backends/Google/) for more information about configuring Cromwell to authenticate using a service account.
+By default, Cromwell will use the account that's currently authenticated with `gcloud` on the current computer. It's possible to configure Cromwell to use a service account, see the [Cromwell: Google Backend](https://cromwell.readthedocs.io/en/stable/backends/Google/) for more information about configuring Cromwell to authenticate using a service account.
   
 ### Running workflows
 
