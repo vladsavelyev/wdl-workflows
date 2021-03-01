@@ -63,8 +63,6 @@ Make sure to keep `&` in the end to run the process in the background, otherwise
 might accidentally interrupt the execution. Use `fg` to bring the process back to the
 foreground.
 
-
-
 ## WARP inputs
 
 The `warp-input-templates/` folder contains templates that can be modified to use with
