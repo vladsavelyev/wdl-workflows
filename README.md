@@ -1,5 +1,7 @@
 # Configuration file templates to run WDL workflows with Cromwell
 
+### Installation
+
 [Cromwell](https://cromwell.readthedocs.io/) is a tool used to execute workflows written
 in [WDL](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md)
 (Workflow Description Language). These workflows can be executed in a local, HPC, or
@@ -8,15 +10,19 @@ cloud (e.g. GCP) environment.
 To install Cromwell, you can use conda:
 
 ```
-create -n cromwell -c conda-forge cromwell
+conda create -n cromwell -c conda-forge cromwell
 conda activate cromwell
 ```
+
+### Configuration
 
 Cromwell can be configured via two files passed to the `-Dconfig.file` and `--options`
 command line arguments. We provide templates for both files, which are suitable for
 running workflows on Google Cloud using
 [Google Cloud Life Sciences](https://cromwell.readthedocs.io/en/stable/tutorials/PipelinesApi101/)
 (previously known as PAPI - Pipelines API).
+
+You must enable the Life Sciences API for your project if using the Cromwell life sciences config. You can do this from the following page (by ensuring you've selected the correct project): https://console.cloud.google.com/apis/library/lifesciences.googleapis.com.
 
 **Important**: Make sure to schedule your VM workers in a region that's colocated with
 your data buckets, to avoid incurring high network egress costs. Don't move large files
@@ -27,7 +33,7 @@ attribute in the template if necessary.
 To run Cromwell, first edit `cromwell.template.conf` to replace the following values in
 angle brackets:
 
-* `<project>`: the Google Cloud project name.
+* `<project>`: the Google Cloud project ID (eg: project-name-12312).
 * `<bucket>`: a Google Cloud Storage bucket name to store executions.
 * (optional) `<mysql-password>`: MySQL password for a locally running MySQL server that
   will be used to track Cromwell executions in order to allow restarts of incomplete
@@ -38,6 +44,12 @@ Also edit `options.template.json`:
 
 * `<bucket>`: a Google Cloud Storage bucket name to store outputs of successfully
   finished executions
+  
+#### Authentication
+
+By default, Cromwell will use the account that's currently authenticated with `gsutil` on the current computer. It's possible to configure Cromwell to use a service account, see the [Cromwell: Google Backend](https://cromwell.readthedocs.io/en/stable/backends/Google/) for more information about configuring Cromwell to authenticate using a service account.
+  
+### Running workflows
 
 Finally, to run a workflow `workflow.wdl` with inputs in `inputs.json`, use the
 following command (assuming the edited configuration files are saved
@@ -50,6 +62,8 @@ cromwell -Dconfig.file=cromwell.conf run workflow.wdl --inputs inputs.json --opt
 Make sure to keep `&` in the end to run the process in the background, otherwise you
 might accidentally interrupt the execution. Use `fg` to bring the process back to the
 foreground.
+
+
 
 ## WARP inputs
 
