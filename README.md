@@ -27,8 +27,7 @@ You must enable the Life Sciences API for your project if using the Cromwell lif
 **Important**: Make sure to schedule your VM workers in a region that's colocated with
 your data buckets, to avoid incurring high network egress costs. Don't move large files
 like BAMs between continents: copying 1 TB of data from the US to Australia costs 190
-USD. Adjust the `default-zones`
-attribute in the template if necessary.
+USD. Adjust the `zones` attribute in the template if necessary.
 
 To run Cromwell, first edit `cromwell.template.conf` to replace the following values in
 angle brackets:
