@@ -14,6 +14,30 @@ conda create -n cromwell -c conda-forge cromwell
 conda activate cromwell
 ```
 
+#### Prerequisites
+
+You must enable the Life Sciences API for your project when using the provided template. You can do this from the following page; make sure you've selected the correct project: https://console.cloud.google.com/apis/library/lifesciences.googleapis.com.
+
+Cromwell can use a MySQL database to keep track of workflow executions. This is required to enable call-caching, which lets you resume workflows by reusing intermediate results. While not strictly necessary, this option is highly recommended, partly because the alternative in-memory database easily runs out of space.
+
+```bash
+brew install mysql
+```
+
+Start a local MySQL server and connect to it:
+
+```bash
+mysql.server start
+mysql -u root
+```
+
+Create a database called `cromwell`, by executing the following at the MySQL prompt:
+
+```sql
+CREATE DATABASE cromwell;
+exit
+```
+
 ### Configuration
 
 Cromwell can be configured via two files passed to the `-Dconfig.file` and `--options`
@@ -22,32 +46,27 @@ running workflows on Google Cloud using
 [Google Cloud Life Sciences](https://cromwell.readthedocs.io/en/stable/tutorials/PipelinesApi101/)
 (previously known as PAPI - Pipelines API).
 
-You must enable the Life Sciences API for your project if using the Cromwell life sciences config. You can do this from the following page (by ensuring you've selected the correct project): https://console.cloud.google.com/apis/library/lifesciences.googleapis.com.
+First edit `cromwell.template.conf` to replace the following values in
+angle brackets:
+
+- `<project>`: the Google Cloud project ID (eg: project-name-12312).
+- `<bucket>`: a Google Cloud Storage bucket name to store executions.
+- `database.db.password`: Update the password in case you changed the default (empty) password for your local MySQL server.
 
 **Important**: Make sure to schedule your VM workers in a region that's colocated with
 your data buckets, to avoid incurring high network egress costs. Don't move large files
 like BAMs between continents: copying 1 TB of data from the US to Australia costs 190
 USD. Adjust the `zones` attribute in the template if necessary.
 
-To run Cromwell, first edit `cromwell.template.conf` to replace the following values in
-angle brackets:
-
-* `<project>`: the Google Cloud project ID (eg: project-name-12312).
-* `<bucket>`: a Google Cloud Storage bucket name to store executions.
-* (optional) `<mysql-password>`: MySQL password for a locally running MySQL server that
-  will be used to track Cromwell executions in order to allow restarts of incomplete
-  runs. You can comment out the entire `database` section if you don't need that
-  functionality.
-
 Also edit `options.template.json`:
 
-* `<bucket>`: a Google Cloud Storage bucket name to store outputs of successfully
+- `<bucket>`: a Google Cloud Storage bucket name to store outputs of successfully
   finished executions
-  
+
 #### Authentication
 
 By default, Cromwell will use the account that's currently authenticated with `gcloud` on the current computer. It's possible to configure Cromwell to use a service account, see the [Cromwell: Google Backend](https://cromwell.readthedocs.io/en/stable/backends/Google/) for more information about configuring Cromwell to authenticate using a service account.
-  
+
 ### Running workflows
 
 Finally, to run a workflow `workflow.wdl` with inputs in `inputs.json`, use the
@@ -68,10 +87,10 @@ The `warp-input-templates/` folder contains templates that can be modified to us
 the [germline variant calling WARP workflows](https://github.com/populationgenomics/warp/blob/master/pipelines/broad/dna_seq/germline/).
 You'll have to replace the input parameters at the top. Specifically:
 
-* `<sample-name>` and `<bam-location>` for the single-sample workflows `WGSFromBam`
+- `<sample-name>` and `<bam-location>` for the single-sample workflows `WGSFromBam`
   and `ExomeFromBam`,
-* parameters in the `sample_and_fastqs` section for `WGSFromFastq`,
-* or the pointer to a `sample_map` file location for `ExomeMultipleSamplesFromBam`
+- parameters in the `sample_and_fastqs` section for `WGSFromFastq`,
+- or the pointer to a `sample_map` file location for `ExomeMultipleSamplesFromBam`
   , `WGSMultipleSamplesFromBam` or `WGSMultipleSamplesFromFastq`, where the sample map
   is a tab-separated file with 2 columns: the sample name, and the input file location.
   For example:
@@ -82,7 +101,6 @@ NA11843	gs://genomics-public-data/ftp-trace.ncbi.nih.gov/1000genomes/ftp/phase3/
 
 All the reference-data inputs are pre-filled to point to the Broad public genomics
 buckets.
-
 
 ## Examples
 
@@ -96,19 +114,19 @@ git clone https://github.com/populationgenomics/fewgenomes
 git clone https://github.com/populationgenomics/warp
 SAMPLE=HG00272
 cromwell -Dconfig.file=cromwell.conf run \
-    warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSFromBam.wdl \ 
+    warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSFromBam.wdl \
     --inputs fewgenomes/datasets/2genomes/wgs_bam/$SAMPLE.json \
     --options options.json
 ```
 
-To run the WGS workflow on multiple samples in parallel for the entire dataset 
+To run the WGS workflow on multiple samples in parallel for the entire dataset
 `6genomes`, use:
 
 ```
 git clone https://github.com/populationgenomics/fewgenomes
 git clone https://github.com/populationgenomics/warp
 cromwell -Dconfig.file=cromwell.conf run \
-    warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSMultipleSamplesFromBam.wdl \ 
+    warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSMultipleSamplesFromBam.wdl \
     --inputs fewgenomes/datasets/6genomes/6genomes-wgs_bam.json \
     --options options.json
 ```
