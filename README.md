@@ -16,22 +16,22 @@ conda activate cromwell
 
 #### Prerequisites
 
-You must enable the Life Sciences API for your project if using the Cromwell life sciences config. You can do this from the following page (by ensuring you've selected the correct project): https://console.cloud.google.com/apis/library/lifesciences.googleapis.com.
+You must enable the Life Sciences API for your project when using the provided template. You can do this from the following page; make sure you've selected the correct project: https://console.cloud.google.com/apis/library/lifesciences.googleapis.com.
 
-Cromwell can use a MySQL database to keep track of workflow executions. This is a prerequisite to using call-caching, which lets you restart workflows. While not strictly necessary, this option is highly recommended, partly because the alternative in-memory database easily runs out of space.
+Cromwell can use a MySQL database to keep track of workflow executions. This is required to enable call-caching, which lets you resume workflows by reusing intermediate results. While not strictly necessary, this option is highly recommended, partly because the alternative in-memory database easily runs out of space.
 
 ```bash
 brew install mysql
 ```
 
-Then, start a local server and connect:
+Start a local MySQL server and connect to it:
 
 ```bash
 mysql.server start
 mysql -u root
 ```
 
-Create a database called "cromwell", by executing the following within the MySQL prompt:
+Create a database called `cromwell`, by executing the following at the MySQL prompt:
 
 ```sql
 CREATE DATABASE cromwell;
