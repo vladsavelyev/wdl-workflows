@@ -34,8 +34,8 @@
     "haplotype_database_file": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
   },
   "WGSFromBam.scatter_settings": {
-    "haplotype_scatter_count": 10,
-    "break_bands_at_multiples_of": 100000
+    "haplotype_scatter_count": 50,
+    "break_bands_at_multiples_of": 1000000
   },
   "WGSFromBam.to_cram": true,
   "WGSFromBam.check_contamination": true,
