@@ -1,11 +1,17 @@
 {
-  "WGSMultipleSamplesFromBam.sample_map": "WGSMultipleSamplesFromBam-samplemap.tsv",
+  "SingleSample.inp": {
+    "sample_name": "NA12878",
+    "base_file_name": "NA12878",
+    "bam_or_cram_or_fastq1": "gs://genomics-public-data/ftp-trace.ncbi.nih.gov/1000genomes/ftp/phase3/data/NA12878/exome_alignment/NA12878.mapped.ILLUMINA.bwa.CEU.exome.20121211.bam",
+    "bai_or_crai_or_fastq2": "gs://genomics-public-data/ftp-trace.ncbi.nih.gov/1000genomes/ftp/phase3/data/NA12878/exome_alignment/NA12878.mapped.ILLUMINA.bwa.CEU.exome.20121211.bam.bai",
+    "final_gvcf_base_name": "NA12878"
+  },
 
-  "WGSMultipleSamplesFromBam.references": {
+  "SingleSample.references": {
     "contamination_sites_ud": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.UD",
     "contamination_sites_bed": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.bed",
     "contamination_sites_mu": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.mu",
-    "calling_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_calling_regions.hg38.interval_list",
+    "calling_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
     "reference_fasta": {
       "ref_dict": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dict",
       "ref_fasta": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta",
@@ -25,21 +31,23 @@
       "gs://gcp-public-data--broad-references/hg38/v0/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",
       "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi"
     ],
-    "dbsnp_vcf": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf",
-    "dbsnp_vcf_index": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
-    "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_evaluation_regions.hg38.interval_list",
-    "haplotype_database_file": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
+    "dbsnp_vcf":                "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf",
+    "dbsnp_vcf_index":          "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf.idx",
+    "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_evaluation_regions.v1.interval_list",
+    "haplotype_database_file":  "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
   },
-  "WGSMultipleSamplesFromBam.scatter_settings": {
+  "SingleSample.scatter_settings": {
     "haplotype_scatter_count": 10,
-    "break_bands_at_multiples_of": 100000
+    "break_bands_at_multiples_of": 0
   },
-  "WGSMultipleSamplesFromBam.to_cram": true,
-  "WGSMultipleSamplesFromBam.check_contamination": true,
-  "WGSMultipleSamplesFromBam.check_fingerprints": true,
-  "WGSMultipleSamplesFromBam.validate_gvcf": false,
-  "WGSMultipleSamplesFromBam.wgs_coverage_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list",
-  "WGSMultipleSamplesFromBam.papi_settings": {
+  "SingleSample.to_cram": true,
+  "SingleSample.check_contamination": true,
+  "SingleSample.check_fingerprints": false,
+  "SingleSample.validate_gvcf": false,
+  "SingleSample.target_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
+  "SingleSample.bait_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
+
+  "SingleSample.papi_settings": {
     "preemptible_tries": 3,
     "agg_preemptible_tries": 3
   }
