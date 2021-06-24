@@ -1,0 +1,9 @@
+{
+    "workflow_failure_mode": "ContinueWhilePossible",
+    "write_to_cache": true,
+    "read_from_cache": true,
+    "use_relative_output_paths": true,
+    "final_workflow_log_dir":     "gs://cpg-fewgenomes-main/cromwell/wf_logs",
+    "final_call_logs_dir":        "gs://cpg-fewgenomes-main/cromwell/call_logs",
+    "final_workflow_outputs_dir": "gs://cpg-fewgenomes-main/cromwell/outputs"
+}
