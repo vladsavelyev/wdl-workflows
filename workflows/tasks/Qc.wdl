@@ -519,7 +519,7 @@ task CollectHsMetrics {
     File target_interval_list
     File bait_interval_list
     Int preemptible_tries
-    Int memory_multiplier = 1
+    Int memory_multiplier = 2
     Int additional_disk = 20
   }
 

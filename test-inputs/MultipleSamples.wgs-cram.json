@@ -39,7 +39,7 @@
   },
 
   "MultipleSamples.to_cram": true,
-  "MultipleSamples.check_contamination": true,
+  "MultipleSamples.check_contamination": false,
   "MultipleSamples.check_fingerprints": false,
   "MultipleSamples.validate_gvcf": false,
   "MultipleSamples.wgs_coverage_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list",
