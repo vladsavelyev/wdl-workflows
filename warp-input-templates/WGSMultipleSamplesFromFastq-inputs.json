@@ -1,19 +1,11 @@
 {
-  "SingleSample.inp": {
-    "sample_name": "HGDP01357-chr20",
-    "base_file_name": "HGDP01357-chr20",
-    "bam_or_cram_or_fastq1": "gs://cpg-fewgenomes-test/hgdp_crams/v1/HGDP01357.alt_bwamem_GRCh38DH.20181023.Basque.cram",
-    "bai_or_crai_or_fastq2": "gs://cpg-fewgenomes-test/hgdp_crams/v1/HGDP01357.alt_bwamem_GRCh38DH.20181023.Basque.cram.crai",
-    "final_gvcf_base_name": "HGDP01357-chr20"
-  },
+  "WGSMultipleSamplesFromFastq.sample_map": "WGSMultipleSamplesFromFastq-samplemap.tsv",
 
-  "SingleSample.subset_region": "chr20",
-
-  "SingleSample.references": {
+  "WGSMultipleSamplesFromFastq.references": {
     "contamination_sites_ud": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.UD",
     "contamination_sites_bed": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.bed",
     "contamination_sites_mu": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.mu",
-    "calling_interval_list": "gs://cpg-reference/hg38/v0/wgs_calling_regions.hg38.chr20.interval_list",
+    "calling_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_calling_regions.hg38.interval_list",
     "reference_fasta": {
       "ref_dict": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dict",
       "ref_fasta": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta",
@@ -38,18 +30,16 @@
     "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_evaluation_regions.hg38.interval_list",
     "haplotype_database_file": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
   },
-  "SingleSample.scatter_settings": {
-    "haplotype_scatter_count": 10,
-    "break_bands_at_multiples_of": 100000
+  "WGSMultipleSamplesFromFastq.scatter_settings": {
+    "haplotype_scatter_count": 50,
+    "break_bands_at_multiples_of": 1000000
   },
-
-  "SingleSample.to_cram": true,
-  "SingleSample.check_contamination": false,
-  "SingleSample.check_fingerprints": false,
-  "SingleSample.validate_gvcf": false,
-  "SingleSample.wgs_coverage_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list",
-
-  "SingleSample.papi_settings": {
+  "WGSMultipleSamplesFromFastq.to_cram": true,
+  "WGSMultipleSamplesFromFastq.check_contamination": true,
+  "WGSMultipleSamplesFromFastq.check_fingerprints": true,
+  "WGSMultipleSamplesFromFastq.validate_gvcf": false,
+  "WGSMultipleSamplesFromFastq.wgs_coverage_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list",
+  "WGSMultipleSamplesFromFastq.papi_settings": {
     "preemptible_tries": 3,
     "agg_preemptible_tries": 3
   }
