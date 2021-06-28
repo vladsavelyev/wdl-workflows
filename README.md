@@ -2,7 +2,7 @@
 
 ## WDL workflows
 
-[WDL](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md) (Workflow Description Language) is a language developed by the Broad Institute that allows to write genomics workflows specification. WDL describes commands to invoke tools, required computationl resources, and how tools are piped together; but it abstracts from particular execution environment implementation.
+[WDL](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md) (Workflow Description Language) is a language developed by the Broad Institute that allows to write genomics workflows specification. WDL describes commands to invoke tools, required computation resources, and how tools are piped together; but it abstracts from particular execution environment implementations.
 
 This repository provides workflows for alignment and germline variant calling of whole genome and exome DNA sequencing data. The `workflows` folder contains two WDL files: `SingleSample.wdl` and `MultipleSamples.wdl`. The former one is based on the [WARP WholeGenomeGermlineSingleSample](https://github.com/broadinstitute/warp/tree/develop/pipelines/broad/dna_seq/germline/single_sample/wgs) workflow, modified to make use of [Bazam](https://github.com/ssadedin/bazam) and [biobambam2](https://github.com/gt1/biobambam2) to stream the enitre alignment process from input BAM/CRAM down to re-aligned CRAM in just single command. Additionally, the exome and WGS functionalities are combined into a single workflow: the former is chosen if `target_interval_list` and `bait_interval_list` are specified, whereas the latter is triggered if `wgs_coverage_interval_list` is specified.
 
@@ -89,4 +89,3 @@ Run multiple single-sample workflows in parallel from input pairs of FASTQs:
 ```bash
 cromwell -Dconfig.file=cromwell.conf run workflows/MultipleSamples.wdl --inputs test-inputs/MultipleSamples.wgs-fastq.json --options options-cache.json &
 ```
-
