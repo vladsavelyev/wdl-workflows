@@ -262,10 +262,10 @@ task BwaFromBamOrCram {
   >>>
   
   runtime {
-    # docker: "australia-southeast1-docker.pkg.dev/fewgenomes/images/bazam:v2"
+    # docker: "australia-southeast1-docker.pkg.dev/cpg-common/images/bazam:v2"
     # cromwell doesn't work with artifact registry:
     # java.lang.Exception: Registry australia-southeast1-docker.pkg.dev is not supported
-    docker: "gcr.io/fewgenomes/bazam:v2"
+    docker: "gcr.io/cpg-common/bwa-bazam:v1"
     preemptible: preemptible_tries
     memory: "64 GiB"
     cpu: total_cpu
