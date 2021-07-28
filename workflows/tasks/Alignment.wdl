@@ -155,18 +155,15 @@ task BwaFromFastq {
   
   # BWA command options:
   # -K     process INT input bases in each batch regardless of nThreads (for reproducibility)
-  # -v3    minimum score to output [30]
   # -t16   threads
-  # -Y     use soft clipping for supplementary alignments
   # -R     read group header line such as '@RG\tID:foo\tSM:bar'
-  # -M     mark shorter split hits as secondary
   command <<<
     set -o pipefail
     set -ex
 
     (while true; do df -h; pwd; du -sh *; free -m; sleep 300; done) &
     
-    bwa mem -K 100000000 -v3 -t~{bwa_cpu} -Y -R '~{rg_line}' \
+    bwa mem -K 100000000 -t~{bwa_cpu} -R '~{rg_line}' \
       ~{reference_fasta.ref_fasta} ~{fastq1} ~{fastq2} \
       2> >(tee ~{output_bam_basename}.bwa.stderr.log >&2) | \
     bamsormadup inputformat=sam threads=~{bamsormadup_cpu} SO=coordinate \
@@ -233,11 +230,8 @@ task BwaFromBamOrCram {
   # BWA command options:
   # -K     process INT input bases in each batch regardless of nThreads (for reproducibility)
   # -p     smart pairing (ignoring in2.fq)
-  # -v3    minimum score to output [30]
   # -t16   threads
-  # -Y     use soft clipping for supplementary alignments
   # -R     read group header line such as '@RG\tID:foo\tSM:bar'
-  # -M     mark shorter split hits as secondary
   command <<<
     set -o pipefail
     set -ex
@@ -246,7 +240,7 @@ task BwaFromBamOrCram {
     
     bazam -Xmx16g -Dsamjdk.reference_fasta=~{reference_fasta.ref_fasta} \
       ~{bazam_regions} -n~{bazam_cpu} -bam ~{bam_or_cram} | \
-    bwa mem -K 100000000 -p -v3 -t~{bwa_cpu} -Y -R '~{rg_line}' \
+    bwa mem -K 100000000 -p -t~{bwa_cpu} -R '~{rg_line}' \
       ~{reference_fasta.ref_fasta} /dev/stdin - \
       2> >(tee ~{output_bam_basename}.bwa.stderr.log >&2) | \
     bamsormadup inputformat=sam threads=~{bamsormadup_cpu} SO=coordinate \
