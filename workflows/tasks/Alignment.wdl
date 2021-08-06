@@ -231,6 +231,7 @@ task BwaFromBamOrCram {
   # -K     process INT input bases in each batch regardless of nThreads (for reproducibility)
   # -p     smart pairing (ignoring in2.fq)
   # -t16   threads
+  # -Y     use soft clipping for supplementary alignments
   # -R     read group header line such as '@RG\tID:foo\tSM:bar'
   command <<<
     set -o pipefail
@@ -240,7 +241,7 @@ task BwaFromBamOrCram {
     
     bazam -Xmx16g -Dsamjdk.reference_fasta=~{reference_fasta.ref_fasta} \
       ~{bazam_regions} -n~{bazam_cpu} -bam ~{bam_or_cram} | \
-    bwa mem -K 100000000 -p -t~{bwa_cpu} -R '~{rg_line}' \
+    bwa mem -Y -K 100000000 -p -t~{bwa_cpu} -R '~{rg_line}' \
       ~{reference_fasta.ref_fasta} /dev/stdin - \
       2> >(tee ~{output_bam_basename}.bwa.stderr.log >&2) | \
     bamsormadup inputformat=sam threads=~{bamsormadup_cpu} SO=coordinate \
