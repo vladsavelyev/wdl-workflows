@@ -1,13 +1,5 @@
 FROM debian:bullseye-slim
 
-# Set these to "-fsanitize=thread" to enable thread sanitizer.
-# Set these to "-fsanitize=address" to enable address sanitizer.
-ARG CCFLAGS
-ARG CXXFLAGS
-
-ENV CCFLAGS=${CCFLAGS}
-ENV CXXFLAGS=${CXXFLAGS}
-
 ENV MAMBA_ROOT_PREFIX /root/micromamba
 ENV PATH $MAMBA_ROOT_PREFIX/bin:$PATH
 
@@ -18,6 +10,14 @@ RUN apt-get update && apt-get install -y git wget bash bzip2 zip curl build-esse
     mkdir $MAMBA_ROOT_PREFIX && \
     micromamba install -y --prefix $MAMBA_ROOT_PREFIX -c bioconda -c conda-forge bwa samtools && \
     rm -r /root/micromamba/pkgs
+
+# Set these to "-fsanitize=thread" to enable thread sanitizer.
+# Set these to "-fsanitize=address" to enable address sanitizer.
+ARG CCFLAGS
+ARG CXXFLAGS
+
+ENV CCFLAGS=${CCFLAGS}
+ENV CXXFLAGS=${CXXFLAGS}
 
 RUN cd / && \
     curl -L https://github.com/jkbonfield/io_lib/releases/download/io_lib-1-14-14/io_lib-1.14.14.tar.gz | tar xz && \
