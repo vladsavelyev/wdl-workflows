@@ -2,8 +2,8 @@ FROM debian:bullseye-slim
 
 # Set these to "-fsanitize=thread" to enable thread sanitizer.
 # Set these to "-fsanitize=address" to enable address sanitizer.
-ARG CCFLAGS=
-ARG CXXFLAGS=
+ARG CCFLAGS
+ARG CXXFLAGS
 
 ENV CCFLAGS=${CCFLAGS}
 ENV CXXFLAGS=${CXXFLAGS}
