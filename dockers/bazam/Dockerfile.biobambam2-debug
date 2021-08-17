@@ -1,0 +1,39 @@
+FROM debian:bullseye-slim
+
+# Set these to "-fsanitize=thread" to enable thread sanitizer.
+# Set these to "-fsanitize=address" to enable address sanitizer.
+ARG CCFLAGS=
+ARG CXXFLAGS=
+
+ENV CCFLAGS=${CCFLAGS}
+ENV CXXFLAGS=${CXXFLAGS}
+
+ENV MAMBA_ROOT_PREFIX /root/micromamba
+ENV PATH $MAMBA_ROOT_PREFIX/bin:$PATH
+
+RUN apt-get update && apt-get install -y git wget bash bzip2 zip curl build-essential g++ libbz2-dev liblzma-dev libzstd-dev libdeflate-dev libsc-dev libsnappy-dev libboost-dev pkg-config && \
+    rm -r /var/lib/apt/lists/* && \
+    rm -r /var/cache/apt/* && \
+    wget -qO- https://api.anaconda.org/download/conda-forge/micromamba/0.8.2/linux-64/micromamba-0.8.2-he9b6cbd_0.tar.bz2 | tar -xvj -C /usr/local bin/micromamba && \
+    mkdir $MAMBA_ROOT_PREFIX && \
+    micromamba install -y --prefix $MAMBA_ROOT_PREFIX -c bioconda -c conda-forge bwa samtools && \
+    rm -r /root/micromamba/pkgs
+
+RUN cd / && \
+    curl -L https://github.com/jkbonfield/io_lib/releases/download/io_lib-1-14-14/io_lib-1.14.14.tar.gz | tar xz && \
+    cd io_lib-1.14.14 && \
+    ./configure && \
+    make -j8 install
+
+RUN cd / && \
+    curl -L https://gitlab.com/german.tischler/libmaus2/-/archive/2.0.800-release-20210802173407/libmaus2-2.0.800-release-20210802173407.tar.gz | tar xz && \
+    cd libmaus2-2.0.800-release-20210802173407 && \
+    ./configure --enable-debug --disable-compile-testprograms && \
+    make -j8 install
+
+RUN cd / && \
+    curl -L https://gitlab.com/german.tischler/biobambam2/-/archive/2.0.183-release-20210802180148/biobambam2-2.0.183-release-20210802180148.tar.gz | tar xz && \
+    cd biobambam2-2.0.183-release-20210802180148 && \
+    ./configure --enable-debug && \
+    make -j8 install
+
