@@ -1,20 +1,29 @@
-# Configuration file templates to run WDL workflows with Cromwell
+# WDL workflows and Cromwell configuration files
+
+## WDL workflows
+
+[WDL](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md) (Workflow Description Language) is a language developed by the Broad Institute that allows to write genomics workflows specification. WDL describes commands to invoke tools, required computation resources, and how tools are piped together; but it abstracts from particular execution environment implementations.
+
+This repository provides workflows for alignment and germline variant calling of whole genome and exome DNA sequencing data. The `workflows` folder contains two WDL files: `SingleSample.wdl` and `MultipleSamples.wdl`. The former one is based on the [WARP WholeGenomeGermlineSingleSample](https://github.com/broadinstitute/warp/tree/develop/pipelines/broad/dna_seq/germline/single_sample/wgs) workflow, modified to make use of [Bazam](https://github.com/ssadedin/bazam) and [biobambam2](https://github.com/gt1/biobambam2) to stream the enitre alignment process from input BAM/CRAM down to re-aligned CRAM in just single command. Additionally, the exome and WGS functionalities are combined into a single workflow: the former is chosen if `target_interval_list` and `bait_interval_list` are specified, whereas the latter is triggered if `wgs_coverage_interval_list` is specified.
+
+The `test-inputs` folder contains examples of input JSONs for the `SingleSample.wdl` and `MultipleSamples.wdl` workflows. Edit the `SingleSample.inp` section to set your own input files (which can be a BAM with an index, a CRAM with an index, or a pair of FASTQs). For `MultipleSamples`, edit a `*.sample-map.tsv` file, and point to it in the `MultipleSamples.sample_map` section of the JSON.
+
+All the reference-data inputs are pre-filled to point to the Broad public genomics buckets.
+
+## Cromwell
+
+[Cromwell](https://cromwell.readthedocs.io/) is a tool used to execute workflows written in WDL. These workflows can be executed in a local, HPC, or cloud (e.g. GCP) environment, however GCP is preferable for CPG.
 
 ### Installation
 
-[Cromwell](https://cromwell.readthedocs.io/) is a tool used to execute workflows written
-in [WDL](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md)
-(Workflow Description Language). These workflows can be executed in a local, HPC, or
-cloud (e.g. GCP) environment.
-
 To install Cromwell, you can use conda:
 
-```
-conda create -n cromwell -c conda-forge cromwell
+```bash
+create -n cromwell -c conda-forge cromwell
 conda activate cromwell
 ```
 
-#### Prerequisites
+### Prerequisites
 
 You must enable the Life Sciences API for your project when using the provided template. You can do this from the following page; make sure you've selected the correct project: https://console.cloud.google.com/apis/library/lifesciences.googleapis.com.
 
@@ -40,97 +49,43 @@ exit
 
 ### Configuration
 
-Cromwell can be configured via two files passed to the `-Dconfig.file` and `--options`
-command line arguments. We provide templates for both files, which are suitable for
-running workflows on Google Cloud using
-[Google Cloud Life Sciences](https://cromwell.readthedocs.io/en/stable/tutorials/PipelinesApi101/)
-(previously known as PAPI - Pipelines API).
+Cromwell can be configured via two files passed to the `-Dconfig.file` and `--options` command line arguments. We provide templates for both files, which are suitable for running workflows on Google Cloud using [Google Cloud Life Sciences](https://cromwell.readthedocs.io/en/stable/tutorials/PipelinesApi101/) (previously known as PAPI - Pipelines API).
 
-First edit `cromwell.template.conf` to replace the following values in
-angle brackets:
+**Important**: Make sure to schedule your VM workers in a region that's colocated with your data buckets, to avoid incurring high network egress costs. Don't move large files like BAMs between continents: copying 1 TB of data from the US to Australia costs 190 USD. Adjust the `default-zones` attribute in the template if necessary.
 
-- `<project>`: the Google Cloud project ID (eg: project-name-12312).
-- `<bucket>`: a Google Cloud Storage bucket name to store executions.
-- `database.db.password`: Update the password in case you changed the default (empty) password for your local MySQL server.
+To run Cromwell, first edit `cromwell.conf` to replace the following hardcoded values:
 
-**Important**: Make sure to schedule your VM workers in a region that's colocated with
-your data buckets, to avoid incurring high network egress costs. Don't move large files
-like BAMs between continents: copying 1 TB of data from the US to Australia costs 190
-USD. Adjust the `zones` attribute in the template if necessary.
+* `project = "fewgenomes"` (defined in `engine` and `backend/providers` sections): Google Cloud project ID (e.g. `project-name-12312`),
+* `root = "gs://cpg-fewgenomes-test-tmp/cromwell/executions"` (defined in the `backend/providers` section): a Google Cloud Storage bucket location to store executions,
+* `password = "12345678"` (defined in the `database` section): MySQL password for a locally running MySQL server that will be used to track Cromwell executions in order to allow restarts of incomplete runs. You can comment out the entire `database` section if you don't need that functionality.
 
-Also edit `options.template.json`:
+Also edit `options.json` or `options-cache.json`, and replace the `gs://cpg-fewgenomes-main` bucket name with your bucket to store logs and outputs of successfully finished executions.
 
-- `<bucket>`: a Google Cloud Storage bucket name to store outputs of successfully
-  finished executions
-
-#### Authentication
+### Authentication
 
 By default, Cromwell will use the account that's currently authenticated with `gcloud` on the current computer. It's possible to configure Cromwell to use a service account, see the [Cromwell: Google Backend](https://cromwell.readthedocs.io/en/stable/backends/Google/) for more information about configuring Cromwell to authenticate using a service account.
 
-### Running workflows
 
-Finally, to run a workflow `workflow.wdl` with inputs in `inputs.json`, use the
-following command (assuming the edited configuration files are saved
-under `cromwell.conf` and `options.json`):
+## Running workflows
 
-```
-cromwell -Dconfig.file=cromwell.conf run workflow.wdl --inputs inputs.json --options options.json &
-```
-
-Make sure to keep `&` in the end to run the process in the background, otherwise you
-might accidentally interrupt the execution. Use `fg` to bring the process back to the
-foreground.
-
-## WARP inputs
-
-The `warp-input-templates/` folder contains templates that can be modified to use with
-the [germline variant calling WARP workflows](https://github.com/populationgenomics/warp/blob/master/pipelines/broad/dna_seq/germline/).
-You'll have to replace the input parameters at the top. Specifically:
-
-- `<sample-name>` and `<bam-location>` for the single-sample workflows `WGSFromBam`
-  and `ExomeFromBam`,
-- parameters in the `sample_and_fastqs` section for `WGSFromFastq`,
-- or the pointer to a `sample_map` file location for `ExomeMultipleSamplesFromBam`
-  , `WGSMultipleSamplesFromBam` or `WGSMultipleSamplesFromFastq`, where the sample map
-  is a tab-separated file with 2 columns: the sample name, and the input file location.
-  For example:
+Finally, to run a workflow (for example, the single sample alignment and germline variant callign workflow `workflows/SingleSample.wdl` with inputs `test-inputs/SingleSample.wgs-cram.json`), use the following command:
 
 ```bash
-NA11843	gs://genomics-public-data/ftp-trace.ncbi.nih.gov/1000genomes/ftp/phase3/data/NA11843/alignment/NA11843.mapped.ILLUMINA.bwa.CEU.low_coverage.20120522.bam
+cromwell -Dconfig.file=cromwell.conf run workflows/SingleSample.wdl --inputs test-inputs/SingleSample.wgs-cram.json --options options.json &
 ```
 
-All the reference-data inputs are pre-filled to point to the Broad public genomics
-buckets.
+Make sure to keep `&` in the end to run the process in the background, otherwise you might accidentally interrupt the execution. Use `fg` to bring the process back to the foreground.
 
-## Examples
+### Examples
 
-To run
-a [WGS single-sample germline variant calling WDL workflow](https://github.com/populationgenomics/warp/blob/start_from_mapped_bam/pipelines/broad/dna_seq/germline/single_sample/) (
-which is based on [Broad WARP](https://github.com/broadinstitute/warp/)) on one sample
-using the data from `gs://genomics-public-data`, run the following commands:
+Run the single-sample exome alignment and variant calling workflow from an input BAM:
 
-```
-git clone https://github.com/populationgenomics/fewgenomes
-git clone https://github.com/populationgenomics/warp
-SAMPLE=HG00272
-cromwell -Dconfig.file=cromwell.conf run \
-    warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSFromBam.wdl \
-    --inputs fewgenomes/datasets/2genomes/wgs_bam/$SAMPLE.json \
-    --options options.json
+```bash
+cromwell -Dconfig.file=cromwell.conf run workflows/SingleSample.wdl --inputs test-inputs/SingleSample.exome-bam.json --options options-cache.json &
 ```
 
-To run the WGS workflow on multiple samples in parallel for the entire dataset
-`6genomes`, use:
+Run multiple single-sample workflows in parallel from input pairs of FASTQs:
 
+```bash
+cromwell -Dconfig.file=cromwell.conf run workflows/MultipleSamples.wdl --inputs test-inputs/MultipleSamples.wgs-fastq.json --options options-cache.json &
 ```
-git clone https://github.com/populationgenomics/fewgenomes
-git clone https://github.com/populationgenomics/warp
-cromwell -Dconfig.file=cromwell.conf run \
-    warp/pipelines/broad/dna_seq/germline/single_sample/wgs/WGSMultipleSamplesFromBam.wdl \
-    --inputs fewgenomes/datasets/6genomes/6genomes-wgs_bam.json \
-    --options options.json
-```
-
-Also
-see [populationgenomics/fewgenomes](https://github.com/populationgenomics/fewgenomes)
-for more details on how the input JSON was generated.

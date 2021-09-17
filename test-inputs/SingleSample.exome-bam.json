@@ -1,10 +1,13 @@
 {
-  "ExomeFromBam.sample_name": "<sample-name>",
-  "ExomeFromBam.base_file_name": "<sample-name>",
-  "ExomeFromBam.final_gvcf_base_name": "<sample-name>",
-  "ExomeFromBam.input_bam": "<bam-location>",
+  "SingleSample.inp": {
+    "sample_name": "NA12878",
+    "base_file_name": "NA12878",
+    "bam_or_cram_or_fastq1": "gs://genomics-public-data/ftp-trace.ncbi.nih.gov/1000genomes/ftp/phase3/data/NA12878/exome_alignment/NA12878.mapped.ILLUMINA.bwa.CEU.exome.20121211.bam",
+    "bai_or_crai_or_fastq2": "gs://genomics-public-data/ftp-trace.ncbi.nih.gov/1000genomes/ftp/phase3/data/NA12878/exome_alignment/NA12878.mapped.ILLUMINA.bwa.CEU.exome.20121211.bam.bai",
+    "final_gvcf_base_name": "NA12878"
+  },
 
-  "ExomeFromBam.references": {
+  "SingleSample.references": {
     "contamination_sites_ud": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.UD",
     "contamination_sites_bed": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.bed",
     "contamination_sites_mu": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.mu",
@@ -33,21 +36,19 @@
     "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_evaluation_regions.v1.interval_list",
     "haplotype_database_file":  "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
   },
-  "ExomeFromBam.scatter_settings": {
-    "haplotype_scatter_count": 50,
+  "SingleSample.scatter_settings": {
+    "haplotype_scatter_count": 10,
     "break_bands_at_multiples_of": 0
   },
-  "ExomeFromBam.target_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
-  "ExomeFromBam.papi_settings": {
+  "SingleSample.to_cram": true,
+  "SingleSample.check_contamination": true,
+  "SingleSample.check_fingerprints": false,
+  "SingleSample.validate_gvcf": false,
+  "SingleSample.target_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
+  "SingleSample.bait_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/exome_calling_regions.v1.interval_list",
+
+  "SingleSample.papi_settings": {
     "preemptible_tries": 3,
     "agg_preemptible_tries": 3
-  },
-  "ExomeFromBam.ExomeFromFastq.AggregatedBamQC.CollectReadgroupBamQualityMetrics.collect_gc_bias_metrics": false,
-  "ExomeFromBam.ExomeFromFastq.AggregatedBamQC.CollectAggregationMetrics.collect_gc_bias_metrics": false,
-  "ExomeFromBam.ExomeFromFastq.FastqsToAlignedBam.CheckContamination.disable_sanity_check": true,
-
-  "ExomeFromBam.to_cram": false,
-  "ExomeFromBam.check_contamination": true,
-  "ExomeFromBam.check_fingerprints": true,
-  "ExomeFromBam.validate_gvcf": false
+  }
 }

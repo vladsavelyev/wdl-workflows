@@ -1,21 +1,7 @@
 {
-  "WGSFromFastq.sample_and_fastqs": {
-    "sample_name": "<sample-name>",
-    "base_file_name": "<sample-name>",
-    "final_gvcf_base_name": "<sample-name>",
-    "fastqs": [
-      [
-        "<fastq-lane1-r1-location>",
-        "<fastq-lane1-r2-location>"
-      ],
-      [
-        "<fastq-lane2-r1-location>",
-        "<fastq-lane2-r2-location>"
-      ]
-    ]
-  },
+  "MultipleSamples.sample_map": "gs://cpg-fewgenomes-test/fastq/v1/MultipleSamples.fastq.sample-map.tsv",
 
-  "WGSFromFastq.references": {
+  "MultipleSamples.references": {
     "contamination_sites_ud": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.UD",
     "contamination_sites_bed": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.bed",
     "contamination_sites_mu": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.mu",
@@ -44,16 +30,18 @@
     "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_evaluation_regions.hg38.interval_list",
     "haplotype_database_file": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"
   },
-  "WGSFromFastq.scatter_settings": {
-    "haplotype_scatter_count": 50,
-    "break_bands_at_multiples_of": 1000000
+  "MultipleSamples.scatter_settings": {
+    "haplotype_scatter_count": 4,
+    "break_bands_at_multiples_of": 100000
   },
-  "WGSFromFastq.to_cram": true,
-  "WGSFromFastq.check_contamination": true,
-  "WGSFromFastq.check_fingerprints": true,
-  "WGSFromFastq.validate_gvcf": false,
-  "WGSFromFastq.wgs_coverage_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list",
-  "WGSFromFastq.papi_settings": {
+
+  "MultipleSamples.to_cram": true,
+  "MultipleSamples.check_contamination": false,
+  "MultipleSamples.check_fingerprints": false,
+  "MultipleSamples.validate_gvcf": false,
+  "MultipleSamples.wgs_coverage_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list",
+
+  "MultipleSamples.papi_settings": {
     "preemptible_tries": 3,
     "agg_preemptible_tries": 3
   }
