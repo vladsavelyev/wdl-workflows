@@ -10,6 +10,76 @@ The `test-inputs` folder contains examples of input JSONs for the `SingleSample.
 
 All the reference-data inputs are pre-filled to point to the Broad public genomics buckets.
 
+## CPG analysis runner
+
+CPG has its own Cromwell server to run WDL-based workflow, which can be accessed through the [analysis runner](https://github.com/populationgenomics/analysis-runner/tree/main/examples/cromwell).
+
+```bash
+pushd workflows
+analysis-runner \
+    --dataset fewgenomes \
+    --output fewgenomes-single-sample-wgs-test \
+    --access-level test \
+    --description 'Test the WDL SingleSample WGS workflow' \
+    --workflow-input-prefix 'SingleSample.' \
+    --imports tasks \
+    SingleSample.wdl \
+    --inp '{\
+	    "sample_name": "HGDP01357-chr20",\
+	    "base_file_name": "HGDP01357-chr20",\
+	    "bam_or_cram_or_fastq1": "gs://cpg-fewgenomes-test/hgdp_crams/v1/HGDP01357.alt_bwamem_GRCh38DH.20181023.Basque.cram",\
+	    "bai_or_crai_or_fastq2": "gs://cpg-fewgenomes-test/hgdp_crams/v1/HGDP01357.alt_bwamem_GRCh38DH.20181023.Basque.cram.crai",\
+	    "final_gvcf_base_name": "HGDP01357-chr20"\
+	  },'\
+    --subset_region "chr20"
+	--references '{\
+	    "contamination_sites_ud": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.UD",\
+	    "contamination_sites_bed": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.bed",\
+	    "contamination_sites_mu": "gs://gcp-public-data--broad-references/hg38/v0/contamination-resources/1000g/1000g.phase3.100k.b38.vcf.gz.dat.mu",\
+	    "calling_interval_list": "gs://cpg-reference/hg38/v0/wgs_calling_regions.hg38.chr20.interval_list",\
+	    "reference_fasta": {\
+	      "ref_dict": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dict",\
+	      "ref_fasta": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta",\
+	      "ref_fasta_index": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.fai",\
+	      "ref_alt": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.64.alt",\
+	      "ref_sa": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.64.sa",\
+	      "ref_amb": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.64.amb",\
+	      "ref_bwt": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.64.bwt",\
+	      "ref_ann": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.64.ann",\
+	      "ref_pac": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.64.pac"\
+	    },\
+	    "known_indels_sites_vcfs": [\
+	      "gs://gcp-public-data--broad-references/hg38/v0/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz",\
+	      "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.known_indels.vcf.gz"\
+	    ],\
+	    "known_indels_sites_indices": [\
+	      "gs://gcp-public-data--broad-references/hg38/v0/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz.tbi",\
+	      "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi"\
+	    ],\
+	    "dbsnp_vcf": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf",\
+	    "dbsnp_vcf_index": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf.idx",\
+	    "evaluation_interval_list": "gs://gcp-public-data--broad-references/hg38/v0/wgs_evaluation_regions.hg38.interval_list",\
+	    "haplotype_database_file": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.haplotype_database.txt"\
+	  },'\
+  	--scatter_settings '{\
+	    "haplotype_scatter_count": 10,\
+	    "break_bands_at_multiples_of": 100000\
+	  }'\
+	--to_cram 'true'\
+	--check_contamination 'false'\
+	--check_fingerprints 'false'\
+	--validate_gvcf 'false'\
+	--wgs_coverage_interval_list '"gs://gcp-public-data--broad-references/hg38/v0/wgs_coverage_regions.hg38.interval_list"'\
+
+    --papi_settings '{\
+	    "preemptible_tries": 3,\
+	    "agg_preemptible_tries": 3\
+    }'
+popd
+
+```
+
+
 ## Cromwell
 
 [Cromwell](https://cromwell.readthedocs.io/) is a tool used to execute workflows written in WDL. These workflows can be executed in a local, HPC, or cloud (e.g. GCP) environment, however GCP is preferable for CPG.

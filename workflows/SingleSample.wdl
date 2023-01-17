@@ -61,21 +61,19 @@ workflow SingleSample {
 
   # Not overridable:
   Int read_length = 250
-  Float lod_threshold = -20.0
-  if (defined(target_interval_list)) {
-    Float lod_threshold = -10.0
-  }
   String cross_check_fingerprints_by = "READGROUP"
   String final_gvcf_base_name = select_first([inp.final_gvcf_base_name, inp.base_file_name])
 
   if (realign) {
-    call Processing.GenerateSubsettedContaminationResources {
-      input:
-        target_interval_list = select_first([target_interval_list]),
-        contamination_sites_bed = references.contamination_sites_bed,
-        contamination_sites_mu = references.contamination_sites_mu,
-        contamination_sites_ud = references.contamination_sites_ud,
-        preemptible_tries = papi_settings.preemptible_tries
+    if (defined(target_interval_list)) {
+      call Processing.GenerateSubsettedContaminationResources {
+        input:
+          target_interval_list = select_first([target_interval_list]),
+          contamination_sites_bed = references.contamination_sites_bed,
+          contamination_sites_mu = references.contamination_sites_mu,
+          contamination_sites_ud = references.contamination_sites_ud,
+          preemptible_tries = papi_settings.preemptible_tries
+      }
     }
 
     call Alignment.Alignment {
@@ -87,14 +85,14 @@ workflow SingleSample {
         check_contamination = check_contamination,
         check_fingerprints = check_fingerprints,
     
-        contamination_sites_ud = GenerateSubsettedContaminationResources.subsetted_contamination_ud,
-        contamination_sites_bed = GenerateSubsettedContaminationResources.subsetted_contamination_bed,
-        contamination_sites_mu = GenerateSubsettedContaminationResources.subsetted_contamination_mu,
+        contamination_sites_ud = select_first([GenerateSubsettedContaminationResources.subsetted_contamination_ud, references.contamination_sites_ud]),
+        contamination_sites_bed = select_first([GenerateSubsettedContaminationResources.subsetted_contamination_bed, references.contamination_sites_bed]),
+        contamination_sites_mu = select_first([GenerateSubsettedContaminationResources.subsetted_contamination_mu, references.contamination_sites_mu]),
   
         cross_check_fingerprints_by = cross_check_fingerprints_by,
         haplotype_database_file = references.haplotype_database_file,
-        lod_threshold = select_first([lod_threshold]),
-      
+        lod_threshold = -20.0,
+
         to_cram = to_cram,
         subset_region = subset_region
     }
